@@ -2,24 +2,28 @@
     <link rel="stylesheet" href="https://unpkg.com/mditor@1.0.5/dist/css/mditor.min.css" />
     <script src="https://unpkg.com/mditor@1.0.5/dist/js/mditor.min.js"></script>
     <div class="container">
-        <h1>发表文章页</h1>
+        <h1>编辑文章页</h1>
         <hr>
         <form id="form">
-            <!-- 在进入文章添加页面的一瞬间，就立即把 文章的 作者Id，保存到 一个隐藏域中，防止 session 失效的问题 -->
-            <input type="hidden" name="authorId" value="<%=user.id%>">
+            <!-- 应该把文章的id保存到隐藏域中-->
+            <input type="hidden" name="id" value='<%=article.id%>'>
+
+
             <div class="form-group">
                 <label>文章标题：</label>
                 <!-- required不允许为空字段 -->
-                <input type="text" name="title" class="form-control" required>
+                <input type="text" name="title" class="form-control" required value="<%=article.title%>">
             </div>
 
             <div class="form-group">
                 <label>文章内容：</label>
-                <textarea name="content" class="form-control" id="editor"></textarea>
+                <textarea name="content" class="form-control" id="editor">
+                    <%=article.content%>
+                </textarea>
             </div>
 
             <div class="form-group">
-                <input type="submit" value="发表文章" class="btn btn-primary">
+                <input type="submit" value="保存文章" class="btn btn-primary">
             </div>
         </form>
     </div>
@@ -29,25 +33,22 @@
             // 初始化编辑器
             var mditor = Mditor.fromTextarea(document.getElementById('editor'));
             $('#form').on('submit', function(e) {
-                //阻止表单默认提交事件
                 e.preventDefault();
+
                 $.ajax({
-                    url: '/article/add',
-                    type: 'post',
+                    url: '/article/edit',
                     data: $('#form').serialize(),
+                    type: 'POST',
                     dataType: 'json',
                     success(res) {
+                        console.log(res);
                         if (res.status !== 200) {
-
-                            return alert('添加失败')
-
+                            return alert('修改文章失败')
                         }
-
-                        location.href = '/article/detail/' + res.insertId;
+                        location.href = '/article/detail/<%=article.id%>'
                     }
                 })
             })
-
         })
     </script>
-    <%- include('../layout/footer.ejs')%>
+    <%- include('../layout/footer.ejs') %>

@@ -1,3 +1,42 @@
 <%-include('./layout/header.ejs')%>
-    <h1>文章列表</h1>
-    <%-include('./layout/footer.ejs')%>
+    <h1>文章列表
+        <%=articles.length%>
+    </h1>
+    <div class="list-group" style="margin:10px;">
+        <%articles.forEach(item=>{%>
+            <a href="/article/detail/<%=item.id%>" class="list-group-item">
+                <%=item.title%>
+                    <span class="badge" style="background:red;">文章作者:<%=item.nickname%></span>
+                    <span class="badge" style="background:orange;">发表时间:<%=item.ctime%></span>
+            </a>
+            <%})%>
+    </div>
+    <!-- 分页区域 -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class=<%=nowPage-1===0? 'disabled': ''%>>
+                <<%=nowPage-1===0? 'span': 'a'%> href="?page=
+                    <%=nowPage-1===0?1:nowPage-1%>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                </<%=nowPage-1===0? 'span': 'a'%>>
+            </li>
+            <!-- <li class="active"><a href="#">1</a></li> -->
+            <%for(var i = 0;i<totalPage;i++){%>
+                <li class="<%=nowPage===(i+1)?'active':''%>">
+                    <a href="/?page=<%=i+1%>">
+                        <%=i+1%>
+                    </a>
+                </li>
+                <%}%>
+                    <!-- <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li> -->
+                    <li class=<%=nowPage+1>totalPage? 'disabled': ''%>>
+                        <<%=nowPage+1>totalPage?'span':'a'%> href="?page=
+                            <%=nowPage+1>totalPage?totalPage:nowPage+1%>" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                        </<%=nowPage+1>totalPage?'span':'a'%>>
+                    </li>
+        </ul>
+    </nav>
+    <%-include( './layout/footer.ejs')%>
