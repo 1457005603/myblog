@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const fs = require('fs');
 const path = require('path');
+const app1 = require('./app');
 //post请求的模块
 const bodyParser = require('body-parser');
 const session = require('express-session');
